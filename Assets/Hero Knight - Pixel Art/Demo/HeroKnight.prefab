@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2655505060201611074}
   - component: {fileID: 2954181336601895002}
   - component: {fileID: 9117128348835321587}
+  - component: {fileID: 7335170077651558470}
   m_Layer: 0
   m_Name: HeroKnight
   m_TagString: Player
@@ -49,8 +50,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4fd1e9cefd8ee847a56a84203330178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mSpeed: 1
+  mSpeed: 1.5
   mSlash: {fileID: 743516306803830438, guid: 6a8b69b1f31ebf54b9a2051d91a17eb8, type: 3}
+  mAttackPos: {fileID: 2719644662205578220}
+  mRB: {fileID: 0}
   mAttackDelay: 1
   mAttackTimer: 0
 --- !u!95 &2655505060201611074
@@ -171,6 +174,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.85, y: 1.25}
   m_EdgeRadius: 0
+--- !u!50 &7335170077651558470
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6323719953710832613}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &7654795775059506241
 GameObject:
   m_ObjectHideFlags: 0

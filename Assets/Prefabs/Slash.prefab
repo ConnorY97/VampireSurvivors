@@ -144,4 +144,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mTimeSpan: 0.25
-  mAttackArea: {x: 2.5, y: 1, z: 1}
+  mAttackArea: {x: 5, y: 2.3, z: 0}

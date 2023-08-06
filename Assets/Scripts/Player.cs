@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float mSpeed = 4.0f;
     [SerializeField] private GameObject mSlash;
     [SerializeField] Transform mAttackPos;
+    [SerializeField] private Rigidbody2D mRB;
     private Animator mAnimator;
     private SpriteRenderer mRenderer;
     [SerializeField] private float mAttackDelay = 1.0f;
@@ -28,6 +29,11 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Missing attack Position");
         }
+        mRB = GetComponent<Rigidbody2D>();
+        if (mRB == null)
+        {
+            Debug.LogError("Missing rigidbody2D");
+        }
     }
 
     // Update is called once per frame
@@ -44,8 +50,7 @@ public class Player : MonoBehaviour
             {
                 Debug.Log("Failed to get Slash from prefab");
             }
-
-            slash.Init(0.0f);
+            slash.Init(1.0f);
             mAttackTimer = 0.0f;
         }
         // Movement
