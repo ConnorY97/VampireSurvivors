@@ -5,10 +5,12 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float mSpeed = 4.0f;
+    [SerializeField] private GameObject mSlash;
+    [SerializeField] Transform mAttackPos;
     private Animator mAnimator;
     private SpriteRenderer mRenderer;
-    private int mAttackDelay = 0;
-
+    [SerializeField] private float mAttackDelay = 1.0f;
+    [SerializeField] private float mAttackTimer = 0.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,26 +24,43 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Missing sprite renderer");
         }
+        if (mAttackPos == null)
+        {
+            Debug.LogError("Missing attack Position");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Timers
+        mAttackTimer += Time.deltaTime;
+        if (mAttackTimer > mAttackDelay )
+        {
+            // Create the slash slightly infrom of the Player
+            GameObject attack = Instantiate(mSlash, mAttackPos.position, Quaternion.identity, transform);
+            Slash slash = attack.GetComponent<Slash>();
+            if (slash == null)
+            {
+                Debug.Log("Failed to get Slash from prefab");
+            }
+
+            slash.Init(0.0f);
+            mAttackTimer = 0.0f;
+        }
         // Movement
         float inputX = Input.GetAxis("Horizontal");
         float inputY = Input.GetAxis("Vertical");
 
         Vector3 movement = new Vector3(inputX, inputY, 0).normalized;
-        movement *= Time.deltaTime;
-        Debug.Log(movement.magnitude);
-        transform.Translate(movement);
+        transform.position += movement * mSpeed * Time.deltaTime;
 
         //Animation
         if (inputX > 0)
         {
             mRenderer.flipX = false;
         }
-        else
+        if (inputX < 0)
         {
             mRenderer.flipX = true;
         }
@@ -54,6 +73,7 @@ public class Player : MonoBehaviour
         {
             mAnimator.SetInteger("AnimState", 0);
         }
-        
+
+
     }
 }
