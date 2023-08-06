@@ -25,8 +25,6 @@ public class GameManager : MonoBehaviour
         {
             mInstance = this;
         }
-        // Keep Object in new scene
-        DontDestroyOnLoad(this.gameObject);
     }
     // Start is called before the first frame update
     void Start()
@@ -65,6 +63,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+            Debug.Log("Exit");
         }
     }
 
@@ -73,5 +72,13 @@ public class GameManager : MonoBehaviour
         mCurrentEnemies.Remove(gameObject);
         Destroy(gameObject);
         mKills++;
+    }
+
+    public void DebudKill()
+    {
+        for (int i = 0; i < mCurrentEnemies.Count; i++)
+        {
+            mCurrentEnemies.Clear();
+        }
     }
 }

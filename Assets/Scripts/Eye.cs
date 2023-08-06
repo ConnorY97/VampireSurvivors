@@ -8,7 +8,5 @@ public class Eye : EnemyBase
     protected override void Start()
     {
         base.Start();
-
-        Debug.Log("Created me");
     }
 }
