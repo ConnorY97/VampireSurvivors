@@ -32,7 +32,17 @@ public class Slash : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.transform.tag == "Player")
+    //        return;
+
+    //    // Pass the object to be killed by the game manager,
+    //    // that way there is no spaghetti code. Keep it clean boi
+    //    GameManager.instance.Killed(collision.gameObject);
+    //}
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.tag == "Player")
             return;
