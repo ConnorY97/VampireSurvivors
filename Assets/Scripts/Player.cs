@@ -7,11 +7,11 @@ public class Player : MonoBehaviour
     [SerializeField] private float mSpeed = 4.0f;
     [SerializeField] private GameObject mSlash;
     [SerializeField] Transform mAttackPos;
-    [SerializeField] private Rigidbody2D mRB;
-    private Animator mAnimator;
-    private SpriteRenderer mRenderer;
     [SerializeField] private float mAttackDelay = 1.0f;
     [SerializeField] private float mAttackTimer = 0.0f;
+    private Rigidbody2D mRB;
+    private Animator mAnimator;
+    private SpriteRenderer mRenderer;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,12 +45,12 @@ public class Player : MonoBehaviour
         {
             // Create the slash slightly infrom of the Player
             GameObject attack = Instantiate(mSlash, mAttackPos.position, Quaternion.identity, transform);
-            Slash slash = attack.GetComponent<Slash>();
-            if (slash == null)
+            AttackBase attackBase = attack.GetComponent<AttackBase>();
+            if (attackBase == null)
             {
                 Debug.Log("Failed to get Slash from prefab");
             }
-            slash.Init(1.0f);
+            attackBase.Init(1.0f);
             mAttackTimer = 0.0f;
         }
         // Movement
@@ -78,7 +78,5 @@ public class Player : MonoBehaviour
         {
             mAnimator.SetInteger("AnimState", 0);
         }
-
-
     }
 }
