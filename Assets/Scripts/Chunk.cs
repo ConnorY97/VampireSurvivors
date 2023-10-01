@@ -7,7 +7,6 @@ public class Chunk : MonoBehaviour
 {
     [SerializeField] private Tilemap mMap;
     [SerializeField] public List<GameObject> mProps = new List<GameObject>();
-    [SerializeField] private int mMaxProps = 5;
     // Start is called before the first frame update
     void Start()
     {
