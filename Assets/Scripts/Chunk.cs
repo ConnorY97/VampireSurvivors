@@ -56,28 +56,28 @@ public class Chunk : MonoBehaviour
                     break;
             }
         }
-        else if (chunk == pastBlock)
-        {
-            switch (direction)
-            {
-                case "Left":
-                    Debug.Log("Left");
-                    SpawnChunk("Left", pastBlock);
-                    break;
-                case "Right":
-                    Debug.Log("Right");
-                    SpawnChunk("Right", pastBlock);
-                    break;
-                case "Top":
-                    Debug.Log("Top");
-                    SpawnChunk("Top", pastBlock);
-                    break;
-                case "Bottom":
-                    Debug.Log("Bottom");
-                    SpawnChunk("Bottom", pastBlock);
-                    break;
-            }
-        }
+        //else if (chunk == pastBlock)
+        //{
+        //    switch (direction)
+        //    {
+        //        case "Left":
+        //            Debug.Log("Left");
+        //            SpawnChunk("Left", pastBlock);
+        //            break;
+        //        case "Right":
+        //            Debug.Log("Right");
+        //            SpawnChunk("Right", pastBlock);
+        //            break;
+        //        case "Top":
+        //            Debug.Log("Top");
+        //            SpawnChunk("Top", pastBlock);
+        //            break;
+        //        case "Bottom":
+        //            Debug.Log("Bottom");
+        //            SpawnChunk("Bottom", pastBlock);
+        //            break;
+        //    }
+        //}
         else
         {
             Debug.Log("Not moving from the current or past block");
@@ -121,27 +121,6 @@ public class Chunk : MonoBehaviour
 
         Block newBlockRef = newBlock.GetComponent<Block>();
         Block currentBlockRef = thisBlock.GetComponent<Block>();
-        // Deactive the trigger for the entry side
-        switch (direction)
-        {
-            case "Left":
-                DeactivateBlockBound(newBlockRef, 1);
-                DeactivateBlockBound(currentBlockRef, 0);
-                break;
-            case "Right":
-                DeactivateBlockBound(newBlockRef, 0);
-                DeactivateBlockBound(currentBlockRef, 1);
-                break;
-            case "Top":
-                DeactivateBlockBound(newBlockRef, 3);
-                DeactivateBlockBound(currentBlockRef, 2);
-                break;
-            case "Bottom":
-                DeactivateBlockBound(newBlockRef, 2);
-                DeactivateBlockBound(currentBlockRef, 3);
-                break;
-        }
-
 
         if (pastBlock != null && thisBlock != pastBlock)
             pastBlock.SetActive(false);
@@ -158,10 +137,5 @@ public class Chunk : MonoBehaviour
     private void SetObjectColour(GameObject obj, Color color)
     {
         obj.GetComponent<SpriteRenderer>().color = color;
-    }
-
-    private void DeactivateBlockBound(Block block, int index)
-    {
-        block.Bounds[index].SetActive(false);
     }
 }
