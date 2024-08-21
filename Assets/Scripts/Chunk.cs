@@ -10,13 +10,12 @@ public class Chunk : MonoBehaviour
     public static Chunk instance => Instance;
 
     public GameObject blockPrefab = null;
+    public GameObject startingBlock = null;
 
     private Dictionary<Vector3, GameObject> blocks = new Dictionary<Vector3, GameObject>();
 
     private GameObject currentBlock = null;
     private GameObject pastBlock = null;
-
-    private int currentBlockIndex = 0;
 
     private void Awake()
     {
@@ -28,8 +27,8 @@ public class Chunk : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentBlock = blockPrefab;
-        currentBlock.GetComponent<SpriteRenderer>().color = Color.green;
+        currentBlock = startingBlock;
+        SetObjectColour(startingBlock, Color.green);
         blocks.Add(currentBlock.transform.position, currentBlock);
     }
 
@@ -41,29 +40,51 @@ public class Chunk : MonoBehaviour
             {
                 case "Left":
                     Debug.Log("Left");
-                    SpawnChunk("Left");
+                    SpawnChunk("Left", currentBlock);
                     break;
                 case "Right":
                     Debug.Log("Right");
-                    SpawnChunk("Right");
+                    SpawnChunk("Right", currentBlock);
                     break;
                 case "Top":
                     Debug.Log("Top");
-                    SpawnChunk("Top");
+                    SpawnChunk("Top", currentBlock);
                     break;
                 case "Bottom":
                     Debug.Log("Bottom");
-                    SpawnChunk("Bottom");
+                    SpawnChunk("Bottom", currentBlock);
+                    break;
+            }
+        }
+        else if (chunk == pastBlock)
+        {
+            switch (direction)
+            {
+                case "Left":
+                    Debug.Log("Left");
+                    SpawnChunk("Left", pastBlock);
+                    break;
+                case "Right":
+                    Debug.Log("Right");
+                    SpawnChunk("Right", pastBlock);
+                    break;
+                case "Top":
+                    Debug.Log("Top");
+                    SpawnChunk("Top", pastBlock);
+                    break;
+                case "Bottom":
+                    Debug.Log("Bottom");
+                    SpawnChunk("Bottom", pastBlock);
                     break;
             }
         }
         else
         {
-            Debug.Log("Not moving from the current chunk");
+            Debug.Log("Not moving from the current or past block");
         }
     }
 
-    private void SpawnChunk(string direction)
+    private void SpawnChunk(string direction, GameObject thisBlock)
     {
         Vector3 newDirection = Vector3.zero;
         switch (direction)
@@ -84,47 +105,63 @@ public class Chunk : MonoBehaviour
 
         newDirection *= 2.5f;
 
-        Vector3 newPos = currentBlock.transform.position + newDirection;
+        Vector3 newPos = thisBlock.transform.position + newDirection;
 
-        GameObject newChunk;
+        GameObject newBlock;
 
         if (blocks.ContainsKey(newPos))
         {
-            newChunk = blocks[newPos];
+            newBlock = blocks[newPos];
         }
         else
         {
-            newChunk = Instantiate(blockPrefab, newPos, Quaternion.identity);
-            blocks.Add(newPos, newChunk);
+            newBlock = Instantiate(blockPrefab, newPos, Quaternion.identity);
+            blocks.Add(newPos, newBlock);
         }
 
+        Block newBlockRef = newBlock.GetComponent<Block>();
+        Block currentBlockRef = thisBlock.GetComponent<Block>();
         // Deactive the trigger for the entry side
         switch (direction)
         {
             case "Left":
-                newChunk.GetComponent<Block>().Bounds[1].SetActive(false);
+                DeactivateBlockBound(newBlockRef, 1);
+                DeactivateBlockBound(currentBlockRef, 0);
                 break;
             case "Right":
-                newChunk.GetComponent<Block>().Bounds[0].SetActive(false);
+                DeactivateBlockBound(newBlockRef, 0);
+                DeactivateBlockBound(currentBlockRef, 1);
                 break;
             case "Top":
-                newChunk.GetComponent<Block>().Bounds[3].SetActive(false);
+                DeactivateBlockBound(newBlockRef, 3);
+                DeactivateBlockBound(currentBlockRef, 2);
                 break;
             case "Bottom":
-                newChunk.GetComponent<Block>().Bounds[2].SetActive(false);
+                DeactivateBlockBound(newBlockRef, 2);
+                DeactivateBlockBound(currentBlockRef, 3);
                 break;
         }
 
 
-        if (pastBlock != null)
+        if (pastBlock != null && thisBlock != pastBlock)
             pastBlock.SetActive(false);
 
-        pastBlock = currentBlock;
-        pastBlock.GetComponent<SpriteRenderer>().color = Color.red;
+        pastBlock = thisBlock;
+        SetObjectColour(pastBlock, Color.red);
 
-        currentBlock = newChunk;
-        currentBlock.GetComponent<SpriteRenderer>().color = Color.green;
+        currentBlock = newBlock;
+        SetObjectColour(currentBlock, Color.green);
 
         currentBlock.SetActive(true);
+    }
+
+    private void SetObjectColour(GameObject obj, Color color)
+    {
+        obj.GetComponent<SpriteRenderer>().color = color;
+    }
+
+    private void DeactivateBlockBound(Block block, int index)
+    {
+        block.Bounds[index].SetActive(false);
     }
 }
