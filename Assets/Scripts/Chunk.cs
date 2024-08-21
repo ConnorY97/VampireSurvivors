@@ -9,12 +9,14 @@ public class Chunk : MonoBehaviour
     private static Chunk Instance = null;
     public static Chunk instance => Instance;
 
-    public GameObject chunkPrefab = null;
+    public GameObject blockPrefab = null;
 
-    private List<GameObject> chunks = new List<GameObject>();
+    private Dictionary<Vector3, GameObject> blocks = new Dictionary<Vector3, GameObject>();
 
-    private GameObject currentChunk = null;
-    private GameObject pastChunk = null;
+    private GameObject currentBlock = null;
+    private GameObject pastBlock = null;
+
+    private int currentBlockIndex = 0;
 
     private void Awake()
     {
@@ -26,13 +28,14 @@ public class Chunk : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentChunk = chunkPrefab;
-        currentChunk.GetComponent<SpriteRenderer>().color = Color.green;
+        currentBlock = blockPrefab;
+        currentBlock.GetComponent<SpriteRenderer>().color = Color.green;
+        blocks.Add(currentBlock.transform.position, currentBlock);
     }
 
     public void LeavingCurrentChunk(GameObject chunk, string direction)
     {
-        if (chunk == currentChunk)
+        if (chunk == currentBlock)
         {
             switch (direction)
             {
@@ -80,9 +83,21 @@ public class Chunk : MonoBehaviour
         }
 
         newDirection *= 2.5f;
-        GameObject newChunk = Instantiate(chunkPrefab, currentChunk.transform.position + newDirection, Quaternion.identity);
 
-        // Find the bound in the right direction
+        Vector3 newPos = currentBlock.transform.position + newDirection;
+
+        GameObject newChunk;
+
+        if (blocks.ContainsKey(newPos))
+        {
+            newChunk = blocks[newPos];
+        }
+        else
+        {
+            newChunk = Instantiate(blockPrefab, newPos, Quaternion.identity);
+            blocks.Add(newPos, newChunk);
+        }
+
         // Deactive the trigger for the entry side
         switch (direction)
         {
@@ -101,15 +116,15 @@ public class Chunk : MonoBehaviour
         }
 
 
-        if (pastChunk != null)
-            pastChunk.SetActive(false);
+        if (pastBlock != null)
+            pastBlock.SetActive(false);
 
-        pastChunk = currentChunk;
-        pastChunk.GetComponent<SpriteRenderer>().color = Color.red;
+        pastBlock = currentBlock;
+        pastBlock.GetComponent<SpriteRenderer>().color = Color.red;
 
-        currentChunk = newChunk;
-        currentChunk.GetComponent<SpriteRenderer>().color = Color.green;
+        currentBlock = newChunk;
+        currentBlock.GetComponent<SpriteRenderer>().color = Color.green;
 
-        currentChunk.SetActive(true);
+        currentBlock.SetActive(true);
     }
 }
